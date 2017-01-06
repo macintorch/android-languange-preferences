@@ -10,9 +10,11 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
+    SharedPreferences sharedPreferences;
+
     public void setLanguage(String language) {
 
-        SharedPreferences sharedPreferences = this.getSharedPreferences("package ainor.com.my.languagepreferences", Context.MODE_PRIVATE);
+       sharedPreferences = this.getSharedPreferences("package ainor.com.my.languagepreferences", Context.MODE_PRIVATE);
 
         sharedPreferences.edit().putString("language", language).apply();
 
@@ -27,24 +29,34 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        new AlertDialog.Builder(this)
-                .setIcon(android.R.drawable.ic_btn_speak_now)
-                .setTitle("Choose Language")
-                .setMessage("Which language would you like?")
-                .setPositiveButton("English", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+        // to avoid alert popup if previously user did select a languange
 
-                        setLanguage("English");
+        sharedPreferences = this.getSharedPreferences("package ainor.com.my.languagepreferences", Context.MODE_PRIVATE);
 
-                    }
-                })
-                .setNegativeButton("Spanish", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+        String language = sharedPreferences.getString("language", "");
 
-                        setLanguage("Spanish");
-                    }
-                })
+        if (language == "") {
+
+            new AlertDialog.Builder(this)
+                    .setIcon(android.R.drawable.ic_btn_speak_now)
+                    .setTitle("Choose Language")
+                    .setMessage("Which language would you like?")
+                    .setPositiveButton("English", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                            setLanguage("English");
+
+                        }
+                    })
+                    .setNegativeButton("Spanish", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                            setLanguage("Spanish");
+                        }
+                    })
+                    .show();
+        }
     }
 }
