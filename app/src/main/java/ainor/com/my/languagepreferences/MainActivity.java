@@ -6,19 +6,17 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
     SharedPreferences sharedPreferences;
+    TextView textView;
 
     public void setLanguage(String language) {
 
-       sharedPreferences = this.getSharedPreferences("package ainor.com.my.languagepreferences", Context.MODE_PRIVATE);
-
         sharedPreferences.edit().putString("language", language).apply();
-
-        TextView textView = (TextView) findViewById(R.id.textView);
 
         textView.setText(language);
 
@@ -31,9 +29,14 @@ public class MainActivity extends AppCompatActivity {
 
         // to avoid alert popup if previously user did select a languange
 
-        sharedPreferences = this.getSharedPreferences("package ainor.com.my.languagepreferences", Context.MODE_PRIVATE);
+        sharedPreferences = this.getSharedPreferences("ainor.com.my.languagepreferences", Context.MODE_PRIVATE);
+
+        textView = (TextView) findViewById(R.id.textView);
 
         String language = sharedPreferences.getString("language", "");
+
+        Log.i("InMemory", language);
+
 
         if (language == "") {
 
@@ -57,6 +60,9 @@ public class MainActivity extends AppCompatActivity {
                         }
                     })
                     .show();
+        } else {
+            textView.setText(language);
         }
+
     }
 }
